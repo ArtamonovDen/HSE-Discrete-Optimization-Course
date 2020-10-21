@@ -1,0 +1,12 @@
+[05:11:01 PM] Problem: san200_0.9_3.clq
+[05:11:01 PM] Initializong Graph
+[05:11:01 PM] Initializong Model
+[05:11:01 PM] Applying Coloring constraints 50 times
+[05:11:02 PM] Applying Clique heuristic
+[05:11:06 PM] Init solution is 33: dict_values([0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0])
+[05:11:06 PM] Model Information: Model: Max Clique-san200_0.9_3.clq
+ - number of variables: 200
+   - binary=0, integer=0, continuous=200
+ - number of constraints: 17095
+   - linear=17095
+[05:11:06 PM] Starting Branch and Bounds...

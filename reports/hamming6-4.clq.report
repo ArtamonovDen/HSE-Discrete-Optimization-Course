@@ -1,0 +1,15 @@
+[03:15:03 PM] Problem: hamming6-4.clq
+[03:15:03 PM] Initializong Graph
+[03:15:03 PM] Initializong Model
+[03:15:04 PM] Applying Coloring constraints 10 times
+[03:15:07 PM] Applying Clique heuristic
+[03:15:07 PM] Init solution is 4: dict_values([0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0])
+[03:15:07 PM] Model Information: Model: Max Clique-hamming6-4.clq
+ - number of variables: 64
+   - binary=0, integer=0, continuous=64
+ - number of constraints: 66541
+   - linear=66541
+[03:15:07 PM] Starting Branch and Bounds...
+[03:17:15 PM] Branch and Bounds have finished
+[03:17:15 PM] BnB time is 2.1266050219535826 minutes
+[03:17:15 PM] Best solution is 4: [7, 8, 49, 62]

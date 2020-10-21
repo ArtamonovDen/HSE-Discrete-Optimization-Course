@@ -1,3 +1,4 @@
+import argparse
 import logging
 import io
 import math
@@ -228,21 +229,9 @@ def init_model(problem, G):
     return model
 
 
-if __name__ == "__main__":
+def main(args):
 
-
-    # problem_file = 'cliques_problems/C125.9.clq'
-    # problem_file = 'cliques_problems/MANN_a9.clq'
-    # problem_file = 'cliques_problems/san200_0.9_1.clq'
-    # problem_file = 'cliques_problems/san200_0.9_2.clq'
-    # problem_file = 'cliques_problems/gen200_p0.9_55.clq'
-
-    # problem_file = 'cliques_problems/san200_0.9_3.clq'  
-
-    problem_file = 'cliques_problems/gen200_p0.9_44.clq'
-
-
-    
+    problem_file = args.problem # 'cliques_problems/gen200_p0.9_44.clq'  
     problem_name = problem_file.split('/')[1]
 
     logging.basicConfig(format='[%(asctime)s] %(message)s', datefmt='%I:%M:%S %p', 
@@ -251,7 +240,7 @@ if __name__ == "__main__":
 
     G = init_graph(problem_file)
     model = init_model(problem_name,G)
-    apply_coloring_constraints(model, G, 50)
+    apply_coloring_constraints(model, G, args.color_step)
     C = clique_heuristic(G)
     init_solution(C)
 
@@ -266,3 +255,12 @@ if __name__ == "__main__":
 
     best_clique = [i for i,j in enumerate(best_x) if j > 0]
     logging.info(f'Best solution is {best_sol}: {best_clique}')
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description='BnB Solver for Maximum Clique Problem')
+    parser.add_argument('-p', '--problem', dest="problem")
+    parser.add_argument('-c', '--color-step', dest="color_step", default=10, type=int)
+    args = parser.parse_args()
+    print(args)
+    main(args)

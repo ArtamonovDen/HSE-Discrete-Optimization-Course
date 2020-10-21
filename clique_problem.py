@@ -153,7 +153,7 @@ def is_clique(C,G):
         C_v.remove(v)
         assert all(elem in G.neighbors(v) for elem in  C_v)
 
-def init_solution(C):
+def init_solution(C, G):
     '''
       Init solution by found heuristic
     '''
@@ -196,7 +196,7 @@ def init_graph(problem):
       Read graph from file
     '''
     # Read graph from file
-    logging.info('Initializong Graph')
+    logging.info('Initializing Graph')
     with open(problem, 'r') as f:
         edges = [
             tuple(map(int,line.split()[1:3])) for line in f if line.startswith('e')
@@ -213,7 +213,7 @@ def init_model(problem, G):
       Init LP model and add basic clique constraints
     '''
 
-    logging.info('Initializong Model')
+    logging.info('Initializing Model')
     nodes = sorted(G.nodes)
 
     # Init LP Model
@@ -231,7 +231,10 @@ def init_model(problem, G):
 
 def main(args):
 
-    problem_file = args.problem # 'cliques_problems/gen200_p0.9_44.clq'  
+    global best_sol 
+    global best_x
+
+    problem_file = args.problem # 'cliques_problems/san200_0.7_1.clq'  
     problem_name = problem_file.split('/')[1]
 
     logging.basicConfig(format='[%(asctime)s] %(message)s', datefmt='%I:%M:%S %p', 
@@ -240,9 +243,9 @@ def main(args):
 
     G = init_graph(problem_file)
     model = init_model(problem_name,G)
-    apply_coloring_constraints(model, G, args.color_step)
+    apply_coloring_constraints(model, G, painting_steps=args.color_step)
     C = clique_heuristic(G)
-    init_solution(C)
+    init_solution(C,G)
 
     logging.info(f'Init solution is {best_sol}: {best_x}')
     logging.info(f'Model Information: {get_model_info(model)}')
@@ -262,5 +265,4 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--problem', dest="problem")
     parser.add_argument('-c', '--color-step', dest="color_step", default=10, type=int)
     args = parser.parse_args()
-    print(args)
     main(args)

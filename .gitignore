@@ -1,0 +1,4 @@
+/examples/*
+/.ipynb_checkpoints/*
+/__pycache__
+/cliques_problems

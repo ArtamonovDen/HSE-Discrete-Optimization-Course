@@ -1,0 +1,15 @@
+[07:49:04 PM] Problem: c-fat200-2.clq
+[07:49:04 PM] Initializing Graph
+[07:49:04 PM] Initializing Model
+[07:49:04 PM] Applying Coloring constraints 30 times
+[07:49:11 PM] Applying Clique heuristic
+[07:49:11 PM] Init solution is 24: dict_values([1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1])
+[07:49:11 PM] Model Information: Model: Max Clique-c-fat200-2.clq
+ - number of variables: 200
+   - binary=0, integer=0, continuous=200
+ - number of constraints: 190232
+   - linear=190232
+[07:49:11 PM] Starting Branch and Bounds...
+[07:49:14 PM] Branch and Bounds have finished
+[07:49:14 PM] BnB time is 0.038596701622009275 minutes
+[07:49:14 PM] Best solution is 24: [0, 1, 18, 19, 36, 37, 54, 55, 72, 73, 90, 91, 108, 109, 126, 127, 144, 145, 162, 163, 180, 181, 198, 199]

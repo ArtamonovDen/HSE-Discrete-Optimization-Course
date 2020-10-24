@@ -42,17 +42,22 @@ def is_int_list(l):
     return all(map(is_integer,l))
 
 
-def branching(vars_list):
+def branching(vars_list, strategy='max'):
     '''
         Return index of x to start branching with.
-        The strategy: random select index among not integers vars
+        The strategy to chose:
+          - random select index among not integers vars
+          - select max x
     '''
     int_mask = list(map(is_integer, vars_list))
-    int_vars = {index:x for index, x in enumerate(vars_list) if not is_integer(x)}
-    if not int_vars:
+    non_int_vars = {index:x for index, x in enumerate(vars_list) if not is_integer(x)}
+    if not non_int_vars:
         raise Exception('All vars are integers')
 
-    return random.choice([*int_vars]) # choice random index
+    if strategy == 'max':
+        return max(non_int_vars, key=non_int_vars.get)
+    if strategy == 'random':
+        return random.choice([*non_int_vars])
 
 def bnb_branch_left(model, branching_var, x):
     left_int_constraint = model.add_constraint(
@@ -143,8 +148,6 @@ def apply_coloring_constraints(model, G, painting_steps=10):
         for node, color in colors_by_nodes.items():
             nodes_by_colors[color].append(node)
             
-
-        
         # Add painting constarints to the model
         for color, nodes_list in nodes_by_colors.items():
             for c_num in range(2, len(nodes_list)+1): # Add different constraints like x1+x2<=1 or x1+x2+x3<=1 etc.
@@ -195,7 +198,6 @@ def clique_heuristic(G):
             if not M:
                 break
 
-        is_clique(C,G)
         if len(C) > len(C_best):
             C_best = C
     return C_best

@@ -49,7 +49,7 @@ def branching(vars_list, strategy='max'):
           - random select index among not integers vars
           - select max x
     '''
-    int_mask = list(map(is_integer, vars_list))
+    
     non_int_vars = {index:x for index, x in enumerate(vars_list) if not is_integer(x)}
     if not non_int_vars:
         raise Exception('All vars are integers')
@@ -92,7 +92,7 @@ def bnb(model):
     x = local_sol.get_all_values()
     ub = local_sol.get_objective_value()
 
-    logging.debug(f'Found solution {ub}')
+    logging.debug(f'Found solution {ub}, {x}')
     ub = round(ub) if is_integer(ub) else math.floor(ub) # ub is int
 
     if ub <= best_sol:
@@ -112,11 +112,11 @@ def bnb(model):
 
     if round(x[i]):
         # choose left branch if x[0] is closer to 0 and right one otherwise
-        bnb_branch_left(model, branching_var, x[i])
         bnb_branch_right(model, branching_var, x[i])
+        bnb_branch_left(model, branching_var, x[i])
     else:
-        bnb_branch_right(model, branching_var, x[i])
         bnb_branch_left(model, branching_var, x[i])
+        bnb_branch_right(model, branching_var, x[i])
 
 
 def check_painting_correct(nodes_by_colors):

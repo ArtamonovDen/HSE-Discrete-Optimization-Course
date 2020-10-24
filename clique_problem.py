@@ -54,6 +54,23 @@ def branching(vars_list):
 
     return random.choice([*int_vars]) # choice random index
 
+def bnb_branch_left(model, branching_var, x):
+    left_int_constraint = model.add_constraint(
+            branching_var <= math.floor(x)
+    )
+    logging.debug(f'Added LEFT constraint: {left_int_constraint}')
+    bnb(model)
+    model.remove_constraint(left_int_constraint)
+    logging.debug(f'Remove LEFT constraint: {left_int_constraint}')
+
+def bnb_branch_right(model, branching_var, x):
+    right_int_constraint = model.add_constraint(
+            branching_var >= math.ceil(x)
+    )
+    logging.debug(f'Added RIGHT constraint: {right_int_constraint}')
+    bnb(model)
+    model.remove_constraint(right_int_constraint)
+    logging.debug(f'Remove RIGHT constraint: {right_int_constraint}')
 
 def bnb(model):
     '''
@@ -70,14 +87,15 @@ def bnb(model):
     x = local_sol.get_all_values()
     ub = local_sol.get_objective_value()
 
-    if (best_sol - ub > EPS):
-        return 
-    
-    if (abs(ub-best_sol) < EPS or ub < best_sol):
-        return
+    logging.debug(f'Found solution {ub}')
+    ub = round(ub) if is_integer(ub) else math.floor(ub) # ub is int
 
+    if ub <= best_sol:
+        logging.debug('Skip branch')
+        return
+    
     if (is_int_list(x)):
-        best_sol = math.floor(ub)
+        best_sol = math.floor(ub) # best_sol is int
         best_x = list(map(round,x))
         logging.info(f'Updated solution: {best_sol}, {best_x}\n')
         return
@@ -86,23 +104,14 @@ def bnb(model):
     branching_var = model.get_var_by_index(i)
 
     logging.debug(f'Branching var is {branching_var}. Branching by value {x[i]}')
-    left_int_constraint = model.add_constraint(
-            branching_var <= math.floor(x[i])
-    )
-    logging.debug(f'Added LEFT constraint: {left_int_constraint}')
-    bnb(model)
-    model.remove_constraint(left_int_constraint)
-    logging.debug(f'Remove LEFT constraint: {left_int_constraint}')
 
-    right_int_constraint = model.add_constraint(
-            branching_var >= math.ceil(x[i])
-    )
-    logging.debug(f'Added RIGHT constraint: {right_int_constraint}')
-    bnb(model)
-    model.remove_constraint(right_int_constraint)
-    logging.debug(f'Remove RIGHT constraint: {right_int_constraint}')
-
-
+    if round(x[i]):
+        # choose left branch if x[0] is closer to 0 and right one otherwise
+        bnb_branch_left(model, branching_var, x[i])
+        bnb_branch_right(model, branching_var, x[i])
+    else:
+        bnb_branch_right(model, branching_var, x[i])
+        bnb_branch_left(model, branching_var, x[i])
 
 
 def check_painting_correct(nodes_by_colors):
@@ -134,7 +143,7 @@ def apply_coloring_constraints(model, G, painting_steps=10):
         for node, color in colors_by_nodes.items():
             nodes_by_colors[color].append(node)
             
-        check_painting_correct(nodes_by_colors)
+
         
         # Add painting constarints to the model
         for color, nodes_list in nodes_by_colors.items():

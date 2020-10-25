@@ -1,0 +1,12 @@
+[01:15:26 PM] Problem: keller4.clq
+[01:15:26 PM] Initializing Graph
+[01:15:26 PM] Initializing Model
+[01:15:26 PM] Applying Coloring constraints 2 times
+[01:15:28 PM] Applying Clique heuristic
+[01:15:28 PM] Init solution is 11: dict_values([1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+[01:15:28 PM] Model Information: Model: Max Clique-keller4.clq
+ - number of variables: 171
+   - binary=0, integer=0, continuous=171
+ - number of constraints: 41088
+   - linear=41088
+[01:15:28 PM] Starting Branch and Bounds...

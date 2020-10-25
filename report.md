@@ -1,3 +1,4 @@
+
 | Problem Name       | Clique Size | Result | painting_steps | Time(min) |
 |--------------------|-------------|--------|----------------|-----------|
 | C125.9.clq         | 34          | OK     | 10             | 7.2       |
@@ -13,3 +14,6 @@
 | gen200_p0.9_44.clq | 35          | TL     | 30             | 60        |
 | hamming6-2.clq     | 32          | OK     | 30             | 0.001     |
 | hamming6-4.clq     | 4           | OK     | 10             | 2.1       |
+| brock200_2         | 12          | OK     | 10             | 190       |
+| keller4            | 11          | TL     | 10             | 180       |
+| p_hat300-1         | 8           | OK     | 0              | 60        |

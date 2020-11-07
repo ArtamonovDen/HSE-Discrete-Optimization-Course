@@ -1,4 +1,8 @@
 
+# Clique problem solutions by branch and bound method
+
+Problems are from <http://iridia.ulb.ac.be/~fmascia/maximum_clique/DIMACS-benchmark>
+
 | Problem Name       | Clique Size | Result | painting_steps | Time(min) |
 |--------------------|-------------|--------|----------------|-----------|
 | C125.9.clq         | 34          | OK     | 10             | 7.2       |

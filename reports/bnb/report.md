@@ -1,5 +1,5 @@
 
-# Clique problem solutions by branch and bound method
+# Clique problem solutions by Branch and Bound method
 
 Problems are from <http://iridia.ulb.ac.be/~fmascia/maximum_clique/DIMACS-benchmark>
 

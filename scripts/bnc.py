@@ -13,7 +13,7 @@ from itertools import combinations, compress
 from collections import defaultdict
 
 
-best_sol = 0
+best_sol = 0.0
 best_x = []
 
 EPS = 1e-09
@@ -241,6 +241,16 @@ def check_solution(C, G):
     return None
 
 
+def assert_is_clique(C, G):
+    '''
+      Check if C is a real clique
+    '''
+    _C = C.copy()
+    while _C:
+        v = _C.pop()
+        assert all(elem in G.neighbors(v) for elem in _C)
+
+
 def init_solution(C, G):
     '''
       Init solution by found heuristic
@@ -266,7 +276,6 @@ def clique_heuristic(G):
         C.add(v)
         M = {n: G.degree(n) for n in G.neighbors(v)}
         while True:
-            local_Clique = []
             w = max(M.items(), key=operator.itemgetter(1))[0]  # get node with max degree
             C.add(w)
             N_w = {n: G.degree(n) for n in G.neighbors(w)}
@@ -276,6 +285,7 @@ def clique_heuristic(G):
 
         if len(C) > len(C_best):
             C_best = C
+    assert_is_clique(C, G)
     return C_best
 
 
@@ -283,16 +293,13 @@ def init_graph(problem):
     '''
       Read graph from file
     '''
-    # Read graph from file
     logging.info('Initializing Graph')
     with open(problem, 'r') as f:
         edges = [
-            tuple(map(int,line.split()[1:3])) for line in f if line.startswith('e')
+            tuple(map(int, line.split()[1:3])) for line in f if line.startswith('e')
         ]
-
     G = nx.Graph()
     G.add_edges_from(edges)
-
     return G
 
 
@@ -307,12 +314,20 @@ def init_model(problem, G):
 
     model = Model(name=f'Max Clique-{problem}')
     x = {i: model.continuous_var(name=f'x_{i}') for i in nodes}
+
     model.add_constraints([x[i] <= 1 for i in nodes])
     model.add_constraints([x[i] >= 0 for i in nodes])
-
     model.maximize(model.sum(x))
 
     return model
+
+
+def init_logger(level, filename):
+    '''
+      Init logger with Log Level
+    '''
+    levels = {'DEBUG': logging.DEBUG, 'INFO': logging.INFO}
+    logging.basicConfig(format='[%(asctime)s] %(message)s', datefmt='%I:%M:%S %p', filename=filename, level=levels[level.upper()])
 
 
 def main(args):
@@ -320,16 +335,15 @@ def main(args):
     global best_sol 
     global best_x
 
-    problem_file = args.problem  # 'cliques_problems/san200_0.7_1.clq'  
+    problem_file = args.problem  # 'cliques_problems/san200_0.7_1.clq'
     problem_name = problem_file.split('/')[1]
+    init_logger(args.log_lvl, f'reports/{problem_name}.report')
 
-    logging.basicConfig(format='[%(asctime)s] %(message)s', datefmt='%I:%M:%S %p', filename=f'reports/{problem_name}.report', level=logging.INFO)
     logging.info(f'Problem: {problem_name}')
 
     G = init_graph(problem_file)
     model = init_model(problem_name, G)
-    # TODO apply independet set constraints
-    # apply_coloring_constraints(model, G, painting_steps=args.color_step)
+
     C = clique_heuristic(G)
     init_solution(C, G)
 
@@ -342,7 +356,7 @@ def main(args):
     logging.info('Branch and Cuts have finished')
     logging.info(f'BnC time is {(end-start)/60} minutes')
 
-    best_clique = [i for i,j in enumerate(best_x) if j > 0]
+    best_clique = [i for i, j in enumerate(best_x) if j > 0]
     logging.info(f'Best solution is {best_sol}: {best_clique}')
 
 
@@ -351,5 +365,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='BnC Solver for Maximum Clique Problem')
     parser.add_argument('-p', '--problem', dest="problem")
     parser.add_argument('-c', '--color-step', dest="color_step", default=10, type=int)
+    parser.add_argument('-l', '--log-lvl', dest="log_lvl", default='info')
+
     args = parser.parse_args()
     main(args)

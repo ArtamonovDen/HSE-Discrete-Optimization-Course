@@ -59,18 +59,18 @@ def separation(G, sol, model):
 
     # Apply coloring algorithm to graph
     colors_by_nodes = nx.algorithms.coloring.greedy_color(G, 'random_sequential')
-    
     nodes_by_colors = defaultdict(list)
-    weights_by_color = defaultdict(int) # weights of each colored independent set
+    weights_by_color = defaultdict(int)  # weights of each colored independent set
+
     for node, color in colors_by_nodes.items():
         nodes_by_colors[color].append(node)
         weights_by_color[color] += sol.get_value(var(f'x_{node}'))
 
     max_weighted_color = max(weights_by_color, key=weights_by_color.get)
     max_independent_set = nodes_by_colors[max_weighted_color]
-    C = model.le_constraint(sum(var(f'x_{i}') for i in max_independent_set), 1)   # TODO return several max constraints? 
+    C = model.le_constraint(sum(var(f'x_{i}') for i in max_independent_set), 1)  # TODO return several max constraints? 
 
-    if len(max_independent_set) <= 1: # Not really sure about that TODO maybe just weight?
+    if len(max_independent_set) <= 1:  # Not really sure about that TODO maybe just weight?
         logging.debug(f'Found constraint {str(C)} is not enough. Stop separation...')
         return None
 
@@ -136,7 +136,6 @@ def bnc(model, G):
     '''
         Main Branch-and-Cut function Called recurcively
     '''
-
     global best_sol
     global best_x
 
@@ -156,16 +155,17 @@ def bnc(model, G):
 
     tail_off_counter = 0
     last_obj = 0
-
     while True:
 
         if tail_off_counter > TAIL_OFF_BOUND:
+            logging.debug('TAIL_OFF_BOUND is reached. Break loop')
             break
 
         logging.debug('Start Separation loop')
         C = separation(G, local_sol, model)
 
         if not C:
+            logging.debug('Separation loop:: no found constraint after separation. Break loop')
             break
 
         model.add_constraint(C)  # TODO add C constraint(s?) to model
@@ -183,13 +183,13 @@ def bnc(model, G):
             logging.debug('Separation loop: solution is not better. Skip branch')
             return
 
-        if is_changed_enough(obj, last_obj):  # Check if objective function changes enough
+        if is_changed_enough(obj, last_obj):
             last_obj = obj
             tail_off_counter = 0
             logging.debug('Objective function change is noticable. Resume counter')
         else:
             tail_off_counter += 1
-            logging.debug(f'Objective function change is small. Current attempt is {tail_off_counter}')
+            logging.debug(f'Objective function change is small. Attempt is increased to {tail_off_counter}')
 
     if (is_int_list(x)):
         possible_clique = np.where(np.array(x) > 0.5)[0] + 1  # from index 0..n-1 to nodes 1..n
@@ -223,34 +223,6 @@ def bnc(model, G):
         bnc_branch_right(model, branching_var, x[i])
 
 
-def apply_coloring_constraints(model, G, painting_steps=10):
-    '''
-       Apply coloring to graph several times and add constraints to model.
-       Constraints: if nodes have same colors they can not be included in the same clique
-    '''
-
-    logging.info(f'Applying Coloring constraints {painting_steps} times')
-    for step in range(painting_steps):
-
-        var = model.get_var_by_name  # get variable by name function
-
-        # Apply coloring algorithm to graph 
-        colors_by_nodes = nx.algorithms.coloring.greedy_color(G, 'random_sequential')
-
-        nodes_by_colors = defaultdict(list)
-        for node, color in colors_by_nodes.items():
-            nodes_by_colors[color].append(node)
-
-        # Add painting constarints to the model
-        for color, nodes_list in nodes_by_colors.items():
-            for c_num in range(2, len(nodes_list)+1):  # Add different constraints like x1+x2<=1 or x1+x2+x3<=1 etc.
-                model.add_constraints(
-                    [model.le_constraint(
-                        sum(var(f'x_{i}') for i in combo), 1
-                        ) for combo in combinations(nodes_list, c_num)]
-                )
-
-
 def check_solution(C, G):
     '''
       Check if C is a clique. Return one missing edge if it's not
@@ -267,18 +239,6 @@ def check_solution(C, G):
             if elem not in G.neighbors(v):
                 return (v, elem)
     return None
-
-
-def is_clique(C, G):
-    '''
-      Check if C is a clique
-    '''
-    _C = C.copy()
-    is_clique = True
-    while _C and is_clique:
-        v = _C.pop()
-        is_clique = all(elem in G.neighbors(v) for elem in _C)
-    return is_clique
 
 
 def init_solution(C, G):
@@ -346,9 +306,9 @@ def init_model(problem, G):
     nodes = sorted(G.nodes)
 
     model = Model(name=f'Max Clique-{problem}')
-    x = {i : model.continuous_var(name= f'x_{i}') for i in nodes}
-    model.add_constraints([x[i] <=1 for i in nodes])
-    model.add_constraints([x[i] >=0 for i in nodes])
+    x = {i: model.continuous_var(name=f'x_{i}') for i in nodes}
+    model.add_constraints([x[i] <= 1 for i in nodes])
+    model.add_constraints([x[i] >= 0 for i in nodes])
 
     model.maximize(model.sum(x))
 

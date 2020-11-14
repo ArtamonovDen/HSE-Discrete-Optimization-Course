@@ -1,0 +1,14 @@
+[08:45:25 PM] Problem: keller4.clq
+[08:45:25 PM] Initializing Graph
+[08:45:25 PM] Initializing Model
+[08:45:25 PM] Applying Clique heuristic
+[08:45:25 PM] Init solution is 11: dict_values([1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+[08:45:25 PM] Model Information: Model: Max Clique-keller4.clq
+ - number of variables: 171
+   - binary=0, integer=0, continuous=171
+ - number of constraints: 342
+   - linear=342
+[08:45:25 PM] Starting Branch and Cuts...
+[08:47:43 PM] Branch and Cuts have finished
+[08:47:43 PM] BnC time is 2.300175905227661 minutes
+[08:47:43 PM] Best solution is 11: [0, 7, 12, 21, 51, 66, 73, 91, 97, 119, 128]

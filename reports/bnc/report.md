@@ -8,6 +8,10 @@ Problems are from <http://iridia.ulb.ac.be/~fmascia/maximum_clique/DIMACS-benchm
 | C125.9         | 34          | OK     | 2.4       |
 | c-fat200-2     | 24          | OK     | 0.002     |
 | c-fat200-5     | 58          | OK     | 0.02      |
+| c-fat500-1     | 14          | OK     | 0.07      |
+| c-fat500-2     | 26          | OK     | 0.4       |
+| c-fat500-5     | 64          | OK     | 0.1       |
+| c-fat500-10    | 126         | OK     | 0.012     |
 | MANN_a9        | 16          | OK     | 0.0008    |
 | san200_0.9_1   | 70          | OK     | 0.0027    |
 | san200_0.9_2   | 60          | OK     | 0.0047    |

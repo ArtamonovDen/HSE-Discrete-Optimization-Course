@@ -7,7 +7,7 @@ import numpy as np
 import operator
 import random
 import time
-
+import sys
 from docplex.mp.model import Model
 from itertools import combinations, compress
 from collections import defaultdict
@@ -47,7 +47,7 @@ def is_int_list(l):
     return all(map(is_integer, l))
 
 
-def compare_with(x):
+def int_or_float(x):
     '''
        Return nearest int if x is int. Prepare to compare with integers
     '''
@@ -76,7 +76,7 @@ def separation(G, sol, model, constraint_num=5):
     max_weighted_colors = sorted(weights_by_color, key=weights_by_color.get)[-constraint_num:]  # Get constraint_num of max weighted sets
     for color in reversed(max_weighted_colors):
         independent_set = nodes_by_colors[color]
-        if compare_with(weights_by_color[color]) > 1:
+        if int_or_float(weights_by_color[color]) > 1:
             C = model.le_constraint(sum(var(f'x_{i}') for i in independent_set), 1)  # TODO return several max constraints? 
             Cs.append(C)
             logging.debug(f'Found Max violated constraint: {str(C)}. Weight is {weights_by_color[color]}')
@@ -132,7 +132,7 @@ def is_best_solution(sol):
     '''
     global best_sol
     sol = round(sol) if is_integer(sol) else math.floor(sol)  # sol is int now
-    return sol >= best_sol
+    return sol > best_sol
 
 
 def is_changed_enough(cur_val, last_val):
@@ -205,13 +205,13 @@ def bnc(model, G):
     i = branching(x)
     if i < 0:
         possible_clique = list(np.where(np.array(x) > 0.5)[0] + 1)  # from index 0..n-1 to nodes 1..n
-        logging.debug(f'Solution is integer. Possible clique is {possible_clique}')
+        logging.debug(f'Solution is integer. Possible clique by vertices is {possible_clique}')
 
         broken_constraint = check_solution(possible_clique, G)
         if not broken_constraint:
-            logging.debug('It is a real clique. Update solution')
-            best_sol = obj
-            best_x = x
+            best_sol = int_or_float(obj) # best_sol is int
+            best_x = list(map(round, x))
+            logging.info(f'Update solution: {best_sol}, {best_x}')
             return
 
         else:
@@ -303,29 +303,6 @@ def clique_heuristic(G):
     return C_best
 
 
-def apply_coloring_constraints(model, G, painting_steps=10):
-    '''
-       Apply coloring to graph several times and add constraints to model.
-       Constraints: if nodes have same colors they can not be included in the same clique
-    '''
-    logging.info(f'Applying Coloring constraints {painting_steps} times')
-    for step in range(painting_steps):
-
-        var = model.get_var_by_name  # get variable by name function
-        # Apply coloring algorithm to graph
-        colors_by_nodes = nx.algorithms.coloring.greedy_color(G, 'random_sequential')
-
-        nodes_by_colors = defaultdict(list)
-        for node, color in colors_by_nodes.items():
-            nodes_by_colors[color].append(node)
-
-        # Add painting constarints to the model
-        for color, nodes_list in nodes_by_colors.items():
-            model.add_constraint(
-                model.le_constraint(sum(var(f'x_{i}') for i in nodes_list), 1)
-            )
-
-
 def init_graph(problem):
     '''
       Read graph from file
@@ -372,6 +349,8 @@ def main(args):
     global best_sol 
     global best_x
 
+    sys.setrecursionlimit(5000)
+
     problem_file = args.problem  # 'cliques_problems/san200_0.7_1.clq'
     problem_name = problem_file.split('/')[1]
     init_logger(args.log_lvl, f'reports/bnc/{problem_name}.report')
@@ -380,7 +359,6 @@ def main(args):
 
     G = init_graph(problem_file)
     model = init_model(problem_name, G)
-    apply_coloring_constraints(model, G, painting_steps=args.color_step)
 
     C = clique_heuristic(G)
     init_solution(C, G)
@@ -402,6 +380,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='BnC Solver for Maximum Clique Problem')
     parser.add_argument('-p', '--problem', dest="problem")
     parser.add_argument('-l', '--log-lvl', dest="log_lvl", default='INFO')
-    parser.add_argument('-c', '--color-step', dest="color_step", default=10, type=int)
     args = parser.parse_args()
     main(args)
